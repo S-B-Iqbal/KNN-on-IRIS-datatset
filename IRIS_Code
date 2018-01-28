@@ -1,0 +1,27 @@
+irfull <- iris
+
+set.seed(123)
+
+randomsamples <- irfull[sample(1:150),]
+
+normalize <- function(x){
+  return( (x - min(x))/ max(x)-min(x))
+}
+
+randomsamples_n <- as.data.frame(lapply(randomsamples[1:4], normalize))
+
+randomsamples_train <- randomsamples_n[1:120,]
+
+randomsamples_test <- randomsamples_n[121:150,]
+
+train_labels <- randomsamples[1:120, 5 ]
+
+test_labels <- randomsamples[121:150, 5]
+
+library(class)
+
+test_pred <- knn(train = randomsamples_train, test = randomsamples_test, cl = train_labels, k = 5)
+
+library(gmodels)
+
+CrossTable(x = test_labels, y = test_pred, prop.chisq = FALSE )
